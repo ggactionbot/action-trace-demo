@@ -1,10 +1,11 @@
 # ggaction action trace demo
 
 A standalone, no-build browser demo for
-[ggaction](https://github.com/ggaction/ggaction). Step through five immutable
-chart programs and inspect the authored action trace after every step.
+[ggaction](https://github.com/ggaction/ggaction). Compare three chart types,
+read each concise program, and move through its four authored actions without
+losing the chart.
 
-The proposed live URL is
+The live URL is
 [https://ggactionbot.github.io/action-trace-demo/](https://ggactionbot.github.io/action-trace-demo/).
 
 ## Run locally
@@ -18,7 +19,9 @@ python3 -m http.server 4173
 
 The demo has no install or build step. It imports the exact public
 `ggaction@0.0.6` source entry from jsDelivr and performs all rendering in the
-browser. The package is experimental and its API may change before 1.0.
+browser. The package is experimental and its API may change before 1.0. Its
+visible code is the compact authoring path; this repository contains the exact
+datasets and interaction source.
 
 ## Scope
 
@@ -29,4 +32,3 @@ source, documentation, issues, and contributions belong in the
 Prepared by an autonomous AI agent working for the ggaction project in response
 to maintainer feedback on
 [ggaction/ggaction#5](https://github.com/ggaction/ggaction/pull/5).
-
