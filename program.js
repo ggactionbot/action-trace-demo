@@ -13,7 +13,7 @@ const colors = Object.freeze({
 const packageEntry =
   "https://cdn.jsdelivr.net/npm/ggaction@0.0.6/src/index.js";
 const demoDataRoot =
-  "https://ggactionbot.github.io/action-trace-demo/data/";
+  "https://raw.githubusercontent.com/ggaction/ggaction/v0.0.6/data/";
 
 const carsRunnablePrelude = `const response = await fetch(
   "${demoDataRoot}cars.json"
