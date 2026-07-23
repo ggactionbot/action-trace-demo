@@ -22,7 +22,8 @@ The live URL is
 Every branch is built from immutable program values. Primitive actions that
 are valid but not yet drawable—such as a point mark before both axes exist—are
 still selectable; the Canvas explicitly holds the last drawable preview until
-the path reaches a renderable state.
+the path reaches a renderable state. The generated program for the selected
+branch stays visible and can be copied directly for further exploration.
 
 ## Run locally
 

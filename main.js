@@ -30,6 +30,7 @@ const branchChoices = document.querySelector("#branch-choices");
 const trace = document.querySelector("#trace-list");
 const previousButton = document.querySelector("#previous");
 const nextButton = document.querySelector("#next");
+const copyProgramButton = document.querySelector("#copy-program");
 const status = document.querySelector("#status");
 
 let scenarios;
@@ -210,6 +211,7 @@ function update() {
   document.querySelector("#branch-summary").textContent =
     `${branch.label} · ${branch.rows} rows · ${branch.stages.length} actions`;
   document.querySelector("#source-code").textContent = branch.source;
+  copyProgramButton.textContent = "Copy program";
   document.querySelector("#step-summary").textContent =
     `Action ${stepIndex + 1} of ${branch.stages.length}: ${stage.label}` +
     (renderedStep === stepIndex
@@ -243,6 +245,19 @@ nextButton.addEventListener("click", () => {
   if (stepIndex < branch.stages.length - 1) {
     stepIndex += 1;
     update();
+  }
+});
+
+copyProgramButton.addEventListener("click", async () => {
+  const source = document.querySelector("#source-code").textContent;
+  try {
+    await navigator.clipboard.writeText(source);
+    copyProgramButton.textContent = "Copied";
+    status.textContent = "Selected ggaction program copied to the clipboard.";
+  } catch {
+    copyProgramButton.textContent = "Copy failed";
+    status.textContent =
+      "Clipboard access failed. Select the visible program code to copy it.";
   }
 });
 

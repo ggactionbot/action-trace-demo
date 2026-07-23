@@ -270,6 +270,22 @@
         color: var(--muted);
         font-size: 0.68rem;
       }
+      .section-actions {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .section-actions button {
+        margin: 0;
+        padding: 0;
+        color: var(--muted);
+        border: 0;
+        background: transparent;
+        font-size: 0.68rem;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+        cursor: pointer;
+      }
       .trace-list {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -482,7 +498,10 @@
               <section class="inspect-section" aria-labelledby="code-title">
                 <div class="section-head">
                   <h3 id="code-title">Program code</h3>
-                  <a href="./program.js">View program source</a>
+                  <div class="section-actions">
+                    <button id="copy-program" type="button">Copy program</button>
+                    <a href="./program.js">View program source</a>
+                  </div>
                 </div>
                 <pre class="code" id="source-code" tabindex="0"></pre>
               </section>
