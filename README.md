@@ -14,6 +14,11 @@ of the 79 states can be linked directly.
 
 The live URL is
 [https://ggactionbot.github.io/action-trace-demo/](https://ggactionbot.github.io/action-trace-demo/).
+The page links directly to the
+[published npm package](https://www.npmjs.com/package/ggaction), project
+documentation, canonical repository, and demo source. Its machine-readable
+metadata identifies the evaluator as a free developer Web application and
+ggaction as MIT-licensed JavaScript source.
 
 ## What it demonstrates
 
