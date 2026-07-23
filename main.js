@@ -32,6 +32,7 @@ const previousButton = document.querySelector("#previous");
 const nextButton = document.querySelector("#next");
 const copyProgramButton = document.querySelector("#copy-program");
 const copyRunnableButton = document.querySelector("#copy-runnable");
+const downloadRunnableButton = document.querySelector("#download-runnable");
 const status = document.querySelector("#status");
 
 let scenarios;
@@ -244,6 +245,7 @@ function update() {
   document.querySelector("#source-code").textContent = branch.source;
   copyProgramButton.textContent = "Copy program";
   copyRunnableButton.textContent = "Copy runnable HTML";
+  downloadRunnableButton.textContent = "Download runnable HTML";
   document.querySelector("#step-summary").textContent =
     `Action ${stepIndex + 1} of ${branch.stages.length}: ${stage.label}` +
     (renderedStep === stepIndex
@@ -306,6 +308,24 @@ copyRunnableButton.addEventListener("click", async () => {
     status.textContent =
       "Clipboard access failed. Copy the visible program and add the setup shown in the repository source.";
   }
+});
+
+downloadRunnableButton.addEventListener("click", () => {
+  const { scenario, branch } = currentSelection();
+  const blob = new Blob([branch.runnableSource], {
+    type: "text/html;charset=utf-8"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `ggaction-${scenario.id}-${branch.id}.html`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+  downloadRunnableButton.textContent = "Runnable HTML downloaded";
+  status.textContent =
+    "Runnable HTML for the selected ggaction branch downloaded.";
 });
 
 window.addEventListener("hashchange", () => {
