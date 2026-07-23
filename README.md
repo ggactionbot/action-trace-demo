@@ -5,7 +5,7 @@ A standalone, no-build browser demo for
 chart programs and inspect the authored action trace after every step.
 
 The proposed live URL is
-[https://ggaction.github.io/action-trace-demo/](https://ggaction.github.io/action-trace-demo/).
+[https://ggactionbot.github.io/action-trace-demo/](https://ggactionbot.github.io/action-trace-demo/).
 
 ## Run locally
 
