@@ -427,6 +427,16 @@
       .code-number { color: #fbbf24; }
       .code-method { color: #93c5fd; }
       .code-comment { color: #9ca3af; font-style: italic; }
+      .project-followup {
+        margin: 12px 0 0;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        background: #f8fafc;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+      .project-followup[hidden] { display: none; }
+      .project-followup a { color: var(--ink); font-weight: 700; }
       .loading { margin: 0; color: var(--muted); font-size: 0.72rem; }
       .footnote {
         display: flex;
@@ -578,6 +588,10 @@
                   </div>
                 </div>
                 <pre class="code" id="source-code" tabindex="0"></pre>
+                <p class="project-followup" id="project-followup" hidden>
+                  Runnable chart ready.
+                  <a href="https://github.com/ggaction/ggaction">View ggaction on GitHub</a>.
+                </p>
               </section>
             </aside>
           </div>

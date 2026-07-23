@@ -37,6 +37,7 @@ const copyRunnableButton = document.querySelector("#copy-runnable");
 const downloadRunnableButton = document.querySelector("#download-runnable");
 const sourceCode = document.querySelector("#source-code");
 const status = document.querySelector("#status");
+const projectFollowup = document.querySelector("#project-followup");
 
 let scenarios;
 let scenarioIndex = 0;
@@ -51,6 +52,10 @@ function currentSelection() {
   const scenario = scenarios[scenarioIndex];
   const branch = scenario.branches[branchIndex].build();
   return { scenario, branch };
+}
+
+function revealProjectFollowup() {
+  projectFollowup.hidden = false;
 }
 
 const sourceKeywords = new Set([
@@ -382,6 +387,7 @@ copyRunnableButton.addEventListener("click", async () => {
     copyRunnableButton.textContent = "Runnable HTML copied";
     status.textContent =
       "Runnable HTML for the selected ggaction branch copied to the clipboard.";
+    revealProjectFollowup();
   } catch {
     copyRunnableButton.textContent = "Copy failed";
     status.textContent =
@@ -405,6 +411,7 @@ downloadRunnableButton.addEventListener("click", () => {
   downloadRunnableButton.textContent = "Runnable HTML downloaded";
   status.textContent =
     "Runnable HTML for the selected ggaction branch downloaded.";
+  revealProjectFollowup();
 });
 
 window.addEventListener("hashchange", () => {

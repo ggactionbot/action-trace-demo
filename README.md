@@ -61,6 +61,9 @@ Visitors can copy the visible fragment, copy a complete runnable HTML document,
 or download that document directly. The runnable artifact includes the pinned
 package import, exact data preparation, accessible Canvas, and rendering setup
 for the selected branch.
+After a runnable copy or download succeeds, the evaluator reveals one quiet
+contextual link to the upstream ggaction repository. It does not open a popup,
+ask for a star, show a count, or repeat the prompt.
 
 The dedicated browser verifier walks all 79 intermediate/final action states
 across eight branches, checks keyboard behavior, exact rows and operations,
