@@ -50,16 +50,17 @@ the MIT-licensed
 Keeping them local makes the evaluator deterministic and avoids an additional
 runtime dependency. The visible program is generated from the same selected
 action path that produces the rendered program.
-Visitors can copy either that visible fragment or a complete runnable HTML
-document with the pinned package import, exact data preparation, accessible
-Canvas, and rendering setup for the selected branch.
+Visitors can copy the visible fragment, copy a complete runnable HTML document,
+or download that document directly. The runnable artifact includes the pinned
+package import, exact data preparation, accessible Canvas, and rendering setup
+for the selected branch.
 
 The dedicated browser verifier walks all 78 intermediate/final action states
 across eight branches, checks keyboard behavior, exact rows and operations,
 branch-distinct Canvas output, 390 px layout, local data and exact-version CDN
-responses, direct state permalinks, all eight copied runnable documents against
-their exact selected Canvas bytes, automated accessibility, and zero
-console/page/request failures:
+responses, direct state permalinks, all eight copied and downloaded runnable
+documents against their exact selected Canvas bytes, automated accessibility,
+and zero console/page/request failures:
 
 ```bash
 node ../mission/tools/verify-advanced-action-trace-demo.mjs \
