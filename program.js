@@ -10,6 +10,77 @@ const colors = Object.freeze({
   red: "#c2414b"
 });
 
+const packageEntry =
+  "https://cdn.jsdelivr.net/npm/ggaction@0.0.6/src/index.js";
+const demoDataRoot =
+  "https://ggactionbot.github.io/action-trace-demo/data/";
+
+const carsRunnablePrelude = `const response = await fetch(
+  "${demoDataRoot}cars.json"
+);
+if (!response.ok) throw new Error(\`cars.json returned HTTP \${response.status}\`);
+const sourceRows = await response.json();
+const cars = sourceRows.filter(row =>
+  Number.isFinite(row.Displacement) &&
+  Number.isFinite(row.Acceleration) &&
+  Number.isFinite(row.Horsepower) &&
+  Number.isFinite(row.Miles_per_Gallon) &&
+  Number.isFinite(row.Cylinders) &&
+  typeof row.Origin === "string" &&
+  row.Origin.length > 0
+);`;
+
+const gapminderRunnablePrelude = `const response = await fetch(
+  "${demoDataRoot}gapminder.json"
+);
+if (!response.ok) {
+  throw new Error(\`gapminder.json returned HTTP \${response.status}\`);
+}
+const sourceRows = await response.json();
+const gapminder = sourceRows.filter(row =>
+  Number.isFinite(row.year) &&
+  Number.isFinite(row.life_expect) &&
+  typeof row.country === "string" &&
+  (typeof row.cluster === "string" || Number.isFinite(row.cluster))
+);`;
+
+function escapeHtml(value) {
+  return value.replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function runnableHtmlFor({ canvasName, dataPrelude, source }) {
+  const escapedName = escapeHtml(canvasName);
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ggaction runnable branch</title>
+    <style>
+      body { margin: 0; padding: 24px; font: 16px system-ui, sans-serif; }
+      canvas { display: block; max-width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <canvas id="chart" aria-label="${escapedName}">${escapedName}.</canvas>
+    <script type="module">
+import { chart, render } from "${packageEntry}";
+
+${dataPrelude}
+
+const context = document.querySelector("#chart").getContext("2d");
+
+${source}
+    </script>
+  </body>
+</html>
+`;
+}
+
 function immutableStep({ id, op, label, code, apply, preview = "render" }) {
   return Object.freeze({ id, op, label, code, apply, preview });
 }
@@ -55,11 +126,17 @@ function buildBranch(definition, branch) {
     }));
   }
 
+  const source = sourceFor(path);
   return Object.freeze({
     ...branch,
     stages: Object.freeze(stages),
     operations: Object.freeze(path.map(step => step.op)),
-    source: sourceFor(path)
+    source,
+    runnableSource: runnableHtmlFor({
+      canvasName: branch.canvasName,
+      dataPrelude: branch.runnablePrelude ?? definition.runnablePrelude,
+      source
+    })
   });
 }
 
@@ -127,6 +204,12 @@ const heatmapYears = Object.freeze([
   1955, 1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005
 ]);
 
+const heatmapRunnablePrelude = `${gapminderRunnablePrelude}
+const selectedRows = gapminder.filter(row =>
+  ${JSON.stringify(heatmapCountries)}.includes(row.country) &&
+  ${JSON.stringify(heatmapYears)}.includes(row.year)
+);`;
+
 function selectHeatmapRows(rows) {
   return rows.filter(row =>
     heatmapCountries.includes(row.country) &&
@@ -145,6 +228,21 @@ const causeOrder = Object.freeze([
   "Wounds & Injuries"
 ]);
 
+const polarRunnablePrelude = `const monthOrder = ${JSON.stringify(monthOrder)};
+const causeOrder = ${JSON.stringify(causeOrder)};
+const response = await fetch(
+  "${demoDataRoot}nightingale_rose.json"
+);
+if (!response.ok) {
+  throw new Error(\`nightingale_rose.json returned HTTP \${response.status}\`);
+}
+const sourceRows = await response.json();
+const nightingale = sourceRows.filter(row =>
+  monthOrder.includes(row.month) &&
+  causeOrder.includes(row.cause) &&
+  Number.isFinite(row.value)
+);`;
+
 function regressionScenario(cars) {
   const rows = completeCars(cars);
   const common = Object.freeze([
@@ -154,7 +252,8 @@ function regressionScenario(cars) {
       label: "Frame a 760 × 500 canvas",
       code: `createCanvas({
     width: 760, height: 500,
-    margin: { top: 82, right: 150, bottom: 68, left: 76 }
+    margin: { top: 82, right: 150, bottom: 68, left: 76 },
+    background: "#ffffff"
   })`,
       apply: program => program.createCanvas({
         width: 760,
@@ -339,6 +438,7 @@ function regressionScenario(cars) {
       "Fork one immutable scatterplot into two statistical explanations.",
     sourceRows: cars.length,
     rows,
+    runnablePrelude: carsRunnablePrelude,
     common,
     branches: Object.freeze([
       regressionBranch({
@@ -383,7 +483,8 @@ function facetsScenario(cars) {
       label: "Frame each small multiple",
       code: `createCanvas({
     width: 270, height: 230,
-    margin: { top: 34, right: 18, bottom: 50, left: 52 }
+    margin: { top: 34, right: 18, bottom: 50, left: 52 },
+    background: "#ffffff"
   })`,
       apply: program => program.createCanvas({
         width: 270,
@@ -410,6 +511,7 @@ function facetsScenario(cars) {
       "Branch after data loading into a faceted relationship or distribution.",
     sourceRows: cars.length,
     rows,
+    runnablePrelude: carsRunnablePrelude,
     common,
     branches: Object.freeze([
       Object.freeze({
@@ -484,7 +586,7 @@ function facetsScenario(cars) {
             code: `createGuides({
     axes: {
       x: { title: { text: "Horsepower" } },
-      y: { title: { text: "Miles per gallon" } }
+      y: { title: { text: "Miles per gallon", offset: 39 } }
     },
     legend: false
   })`,
@@ -515,7 +617,8 @@ function facetsScenario(cars) {
             label: "Name the comparison",
             code: `createTitle({
     text: "Horsepower and fuel economy",
-    subtitle: "Faceted by vehicle origin"
+    subtitle: "Faceted by vehicle origin",
+    align: "center"
   })`,
             apply: program => program.createTitle({
               text: "Horsepower and fuel economy",
@@ -560,7 +663,8 @@ function facetsScenario(cars) {
             label: "Bin engine displacement",
             code: `encodeHistogram({
     field: "Displacement",
-    binBoundaries: [50, 106.25, 162.5, 218.75, 275, 331.25, 387.5, 443.75, 500]
+    binBoundaries: [50, 106.25, 162.5, 218.75, 275, 331.25, 387.5, 443.75, 500],
+    xScale: { nice: true, zero: false }
   })`,
             apply: program => program.encodeHistogram({
               field: "Displacement",
@@ -599,7 +703,7 @@ function facetsScenario(cars) {
           labels: { format: { decimals: 0 } }
         }
       },
-      y: { title: { text: "Count" } }
+      y: { title: { text: "Count", offset: 39 } }
     },
     legend: false,
     grid: { horizontal: true, vertical: false }
@@ -642,7 +746,8 @@ function facetsScenario(cars) {
             label: "Name the distribution",
             code: `createTitle({
     text: "Displacement distribution",
-    subtitle: "Faceted by vehicle origin"
+    subtitle: "Faceted by vehicle origin",
+    align: "center"
   })`,
             apply: program => program.createTitle({
               text: "Displacement distribution",
@@ -679,7 +784,8 @@ function worldScenario(gapminder) {
       label: "Frame a 760 × 480 canvas",
       code: `createCanvas({
     width: 760, height: 480,
-    margin: { top: 82, right: 145, bottom: 70, left: 88 }
+    margin: { top: 82, right: 145, bottom: 70, left: 88 },
+    background: "#ffffff"
   })`,
       apply: program => program.createCanvas({
         width: 760,
@@ -706,6 +812,7 @@ function worldScenario(gapminder) {
         label: "Uncertainty",
         description: "Cluster means with 95% confidence intervals.",
         rows: rows.length,
+        runnablePrelude: gapminderRunnablePrelude,
         canvasName:
           "Life expectancy by year and world cluster with 95 percent confidence intervals",
         steps: Object.freeze([
@@ -731,7 +838,11 @@ function worldScenario(gapminder) {
     y: { field: "life_expect" },
     groupBy: "cluster",
     curve: "cardinal",
-    boundaries: { strokeWidth: 1.3 }
+    boundaries: {
+      stroke: "#172033",
+      strokeWidth: 1.3,
+      opacity: 0.72
+    }
   })`,
             apply: program => program.createErrorBand({
               x: { field: "year", fieldType: "temporal" },
@@ -814,6 +925,7 @@ function worldScenario(gapminder) {
         label: "Heatmap",
         description: "Six countries across eleven five-year snapshots.",
         rows: heatmapRows.length,
+        runnablePrelude: heatmapRunnablePrelude,
         canvasName:
           "Heatmap of life expectancy for six countries from 1955 through 2005",
         steps: Object.freeze([
@@ -842,6 +954,13 @@ function worldScenario(gapminder) {
       field: "life_expect",
       fieldType: "quantitative",
       scale: { type: "sequential", palette: "viridis" }
+    },
+    guides: {
+      axes: {
+        x: { title: { text: "Year" } },
+        y: { title: { text: "Country" } }
+      },
+      legend: { title: "Life expectancy" }
     }
   })`,
             apply: program => program.createHeatmap({
@@ -898,7 +1017,8 @@ function worldScenario(gapminder) {
             label: "Name the tiled comparison",
             code: `createTitle({
     text: "Life expectancy over time",
-    subtitle: "Six countries · 1955–2005"
+    subtitle: "Six countries · 1955–2005",
+    align: "center"
   })`,
             apply: program => program.createTitle({
               text: "Life expectancy over time",
@@ -925,7 +1045,8 @@ function polarScenario(nightingale) {
       label: "Frame a 700 × 560 canvas",
       code: `createCanvas({
     width: 700, height: 560,
-    margin: { top: 72, right: 170, bottom: 64, left: 64 }
+    margin: { top: 72, right: 170, bottom: 64, left: 64 },
+    background: "#ffffff"
   })`,
       apply: program => program.createCanvas({
         width: 700,
@@ -1043,7 +1164,10 @@ function polarScenario(nightingale) {
         code: `createGuides({
     axes: {
       theta: { title: false },
-      radius: { title: { text: "Mortality rate" } }
+      radius: {
+        ticksAndLabels: { values: [2, 4, 6] },
+        title: { text: "Mortality rate", position: "inside" }
+      }
     },
     grid: { theta: false, radial: { values: [2, 4, 6] } },
     legend: ${focus ? "false" : `{ position: "right", title: "Cause" }`}
@@ -1099,6 +1223,7 @@ function polarScenario(nightingale) {
       "Preserve the full rose diagram or derive a focused disease view.",
     sourceRows: nightingale.length,
     rows,
+    runnablePrelude: polarRunnablePrelude,
     common,
     branches: Object.freeze([
       polarBranch({

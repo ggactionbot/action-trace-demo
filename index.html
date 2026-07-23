@@ -260,6 +260,7 @@
       .inspect-section + .inspect-section { border-top: 1px solid var(--line); }
       .section-head {
         display: flex;
+        flex-wrap: wrap;
         align-items: baseline;
         justify-content: space-between;
         gap: 15px;
@@ -272,7 +273,9 @@
       }
       .section-actions {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: flex-end;
         gap: 11px;
       }
       .section-actions button {
@@ -500,6 +503,7 @@
                   <h3 id="code-title">Program code</h3>
                   <div class="section-actions">
                     <button id="copy-program" type="button">Copy program</button>
+                    <button id="copy-runnable" type="button">Copy runnable HTML</button>
                     <a href="./program.js">View program source</a>
                   </div>
                 </div>

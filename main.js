@@ -31,6 +31,7 @@ const trace = document.querySelector("#trace-list");
 const previousButton = document.querySelector("#previous");
 const nextButton = document.querySelector("#next");
 const copyProgramButton = document.querySelector("#copy-program");
+const copyRunnableButton = document.querySelector("#copy-runnable");
 const status = document.querySelector("#status");
 
 let scenarios;
@@ -95,6 +96,7 @@ function publishState(scenario, branch, stage, renderedStep) {
     commonSteps: scenario.commonSteps,
     operations: branch.operations,
     rows: branch.rows,
+    runnableBytes: new TextEncoder().encode(branch.runnableSource).byteLength,
     sourceRows: scenario.sourceRows,
     datasets: resourceCount(program, "datasets"),
     layers: resourceCount(program, "layers"),
@@ -241,6 +243,7 @@ function update() {
     `${branch.label} · ${branch.rows} rows · ${branch.stages.length} actions`;
   document.querySelector("#source-code").textContent = branch.source;
   copyProgramButton.textContent = "Copy program";
+  copyRunnableButton.textContent = "Copy runnable HTML";
   document.querySelector("#step-summary").textContent =
     `Action ${stepIndex + 1} of ${branch.stages.length}: ${stage.label}` +
     (renderedStep === stepIndex
@@ -288,6 +291,20 @@ copyProgramButton.addEventListener("click", async () => {
     copyProgramButton.textContent = "Copy failed";
     status.textContent =
       "Clipboard access failed. Select the visible program code to copy it.";
+  }
+});
+
+copyRunnableButton.addEventListener("click", async () => {
+  const { branch } = currentSelection();
+  try {
+    await navigator.clipboard.writeText(branch.runnableSource);
+    copyRunnableButton.textContent = "Runnable HTML copied";
+    status.textContent =
+      "Runnable HTML for the selected ggaction branch copied to the clipboard.";
+  } catch {
+    copyRunnableButton.textContent = "Copy failed";
+    status.textContent =
+      "Clipboard access failed. Copy the visible program and add the setup shown in the repository source.";
   }
 });
 
