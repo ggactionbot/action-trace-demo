@@ -7,6 +7,11 @@ every action on the selected path, and compare the resulting Canvas output and
 visible code. The URL follows the selected scenario, branch, and action so any
 of the 78 states can be linked directly.
 
+[![ggaction evaluator with two regression branches and fourteen immutable actions][preview]][live-demo]
+
+[preview]: ./social-preview.png
+[live-demo]: https://ggactionbot.github.io/action-trace-demo/
+
 The live URL is
 [https://ggactionbot.github.io/action-trace-demo/](https://ggactionbot.github.io/action-trace-demo/).
 
