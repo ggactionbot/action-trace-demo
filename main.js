@@ -28,11 +28,14 @@ const context = canvas.getContext("2d");
 const scenarioTabs = document.querySelector("#scenario-tabs");
 const branchChoices = document.querySelector("#branch-choices");
 const trace = document.querySelector("#trace-list");
+const traceSlider = document.querySelector("#trace-slider");
+const traceOutput = document.querySelector("#trace-output");
 const previousButton = document.querySelector("#previous");
 const nextButton = document.querySelector("#next");
 const copyProgramButton = document.querySelector("#copy-program");
 const copyRunnableButton = document.querySelector("#copy-runnable");
 const downloadRunnableButton = document.querySelector("#download-runnable");
+const sourceCode = document.querySelector("#source-code");
 const status = document.querySelector("#status");
 
 let scenarios;
@@ -48,6 +51,36 @@ function currentSelection() {
   const scenario = scenarios[scenarioIndex];
   const branch = scenario.branches[branchIndex].build();
   return { scenario, branch };
+}
+
+const sourceKeywords = new Set([
+  "await", "const", "false", "import", "from", "new", "null", "throw", "true"
+]);
+const sourceTokenPattern =
+  /(\/\/[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:await|const|false|import|from|new|null|throw|true)\b|\b\d+(?:\.\d+)?\b|(?<=\.)[A-Za-z_$][\w$]*(?=\s*\())/g;
+
+function highlightSource(source) {
+  const fragment = document.createDocumentFragment();
+  let cursor = 0;
+  for (const match of source.matchAll(sourceTokenPattern)) {
+    fragment.append(document.createTextNode(source.slice(cursor, match.index)));
+    const token = match[0];
+    const span = document.createElement("span");
+    span.className = token.startsWith("//")
+      ? "code-comment"
+      : sourceKeywords.has(token)
+        ? "code-keyword"
+        : /^["'`]/.test(token)
+          ? "code-string"
+          : /^\d/.test(token)
+            ? "code-number"
+            : "code-method";
+    span.textContent = token;
+    fragment.append(span);
+    cursor = match.index + token.length;
+  }
+  fragment.append(document.createTextNode(source.slice(cursor)));
+  sourceCode.replaceChildren(fragment);
 }
 
 function restorePermalink() {
@@ -200,10 +233,13 @@ function updateTrace(scenario, branch) {
       button.classList.add("is-current");
       button.setAttribute("aria-current", "step");
     }
+    button.setAttribute(
+      "aria-label",
+      `Action ${index + 1} of ${branch.stages.length}: ${stage.op} — ${stage.label}`
+    );
     button.innerHTML = [
       `<span>${index + 1}</span>`,
-      `<code>${stage.op}</code>`,
-      `<small>${stage.label}</small>`
+      `<code>${stage.op}</code>`
     ].join("");
     button.addEventListener("click", () => {
       stepIndex = index;
@@ -212,6 +248,20 @@ function updateTrace(scenario, branch) {
     item.append(button);
     return item;
   }));
+  traceSlider.max = String(branch.stages.length);
+  traceSlider.value = String(stepIndex + 1);
+  traceSlider.setAttribute(
+    "aria-label",
+    `Chart authoring progress, action ${stepIndex + 1} of ${branch.stages.length}`
+  );
+  traceOutput.textContent =
+    `${stepIndex + 1} / ${branch.stages.length} · ${branch.stages[stepIndex].label}`;
+  requestAnimationFrame(() => {
+    trace.querySelector('[aria-current="step"]')?.scrollIntoView({
+      block: "nearest",
+      inline: "center"
+    });
+  });
 }
 
 function update() {
@@ -242,7 +292,7 @@ function update() {
     scenario.description;
   document.querySelector("#branch-summary").textContent =
     `${branch.label} · ${branch.rows} rows · ${branch.stages.length} actions`;
-  document.querySelector("#source-code").textContent = branch.source;
+  highlightSource(branch.source);
   copyProgramButton.textContent = "Copy program";
   copyRunnableButton.textContent = "Copy runnable HTML";
   downloadRunnableButton.textContent = "Download runnable HTML";
@@ -275,6 +325,11 @@ previousButton.addEventListener("click", () => {
   }
 });
 
+traceSlider.addEventListener("input", () => {
+  stepIndex = Number(traceSlider.value) - 1;
+  update();
+});
+
 nextButton.addEventListener("click", () => {
   const { branch } = currentSelection();
   if (stepIndex < branch.stages.length - 1) {
@@ -283,8 +338,32 @@ nextButton.addEventListener("click", () => {
   }
 });
 
+document.addEventListener("keydown", event => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (
+    !["ArrowLeft", "ArrowRight"].includes(event.key) ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey ||
+    target?.closest(
+      'input, textarea, select, [contenteditable="true"], [role="tab"], [role="radio"]'
+    )
+  ) return;
+  const { branch } = currentSelection();
+  const delta = event.key === "ArrowRight" ? 1 : -1;
+  const nextIndex = Math.max(
+    0,
+    Math.min(branch.stages.length - 1, stepIndex + delta)
+  );
+  if (nextIndex === stepIndex) return;
+  event.preventDefault();
+  stepIndex = nextIndex;
+  update();
+});
+
 copyProgramButton.addEventListener("click", async () => {
-  const source = document.querySelector("#source-code").textContent;
+  const source = sourceCode.textContent;
   try {
     await navigator.clipboard.writeText(source);
     copyProgramButton.textContent = "Copied";

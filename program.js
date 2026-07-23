@@ -191,32 +191,6 @@ function completeGapminder(rows) {
   );
 }
 
-const heatmapCountries = Object.freeze([
-  "Afghanistan",
-  "Brazil",
-  "China",
-  "India",
-  "Japan",
-  "United States"
-]);
-
-const heatmapYears = Object.freeze([
-  1955, 1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995, 2000, 2005
-]);
-
-const heatmapRunnablePrelude = `${gapminderRunnablePrelude}
-const selectedRows = gapminder.filter(row =>
-  ${JSON.stringify(heatmapCountries)}.includes(row.country) &&
-  ${JSON.stringify(heatmapYears)}.includes(row.year)
-);`;
-
-function selectHeatmapRows(rows) {
-  return rows.filter(row =>
-    heatmapCountries.includes(row.country) &&
-    heatmapYears.includes(row.year)
-  );
-}
-
 const monthOrder = Object.freeze([
   "April", "May", "June", "July", "August", "September",
   "October", "November", "December", "January", "February", "March"
@@ -776,7 +750,6 @@ function facetsScenario(cars) {
 
 function worldScenario(gapminder) {
   const rows = completeGapminder(gapminder);
-  const heatmapRows = selectHeatmapRows(rows);
   const common = Object.freeze([
     immutableStep({
       id: "canvas",
@@ -793,47 +766,25 @@ function worldScenario(gapminder) {
         margin: { top: 82, right: 145, bottom: 70, left: 88 },
         background: "#ffffff"
       })
-    })
-  ]);
-
-  return {
-    id: "world",
-    tab: "World health",
-    eyebrow: "682 source rows · statistical or tiled",
-    title: "How can one dataset answer two questions?",
-    description:
-      "Fork after the canvas into uncertainty over time or a labeled heatmap.",
-    sourceRows: gapminder.length,
-    rows,
-    common,
-    branches: Object.freeze([
-      Object.freeze({
-        id: "uncertainty",
-        label: "Uncertainty",
-        description: "Cluster means with 95% confidence intervals.",
-        rows: rows.length,
-        runnablePrelude: gapminderRunnablePrelude,
-        canvasName:
-          "Life expectancy by year and world cluster with 95 percent confidence intervals",
-        steps: Object.freeze([
-          immutableStep({
-            id: "uncertainty-data",
-            op: "createData",
-            label: `Load ${rows.length} country-year records`,
-            code: `createData({
+    }),
+    immutableStep({
+      id: "data",
+      op: "createData",
+      label: `Load ${rows.length} country-year records`,
+      code: `createData({
     id: "gapminder",
     values: gapminder
   })`,
-            apply: program => program.createData({
-              id: "gapminder",
-              values: rows
-            })
-          }),
-          immutableStep({
-            id: "uncertainty-band",
-            op: "createErrorBand",
-            label: "Derive mean and 95% interval",
-            code: `createErrorBand({
+      apply: program => program.createData({
+        id: "gapminder",
+        values: rows
+      })
+    }),
+    immutableStep({
+      id: "band",
+      op: "createErrorBand",
+      label: "Derive mean and 95% interval",
+      code: `createErrorBand({
     x: { field: "year", fieldType: "temporal" },
     y: { field: "life_expect" },
     groupBy: "cluster",
@@ -844,37 +795,59 @@ function worldScenario(gapminder) {
       opacity: 0.72
     }
   })`,
-            apply: program => program.createErrorBand({
-              x: { field: "year", fieldType: "temporal" },
-              y: { field: "life_expect" },
-              groupBy: "cluster",
-              curve: "cardinal",
-              boundaries: {
-                stroke: colors.ink,
-                strokeWidth: 1.3,
-                opacity: 0.72
-              }
-            })
-          }),
-          immutableStep({
-            id: "uncertainty-color",
-            op: "encodeColor",
-            label: "Map cluster to color",
-            code: `encodeColor({
+      apply: program => program.createErrorBand({
+        x: { field: "year", fieldType: "temporal" },
+        y: { field: "life_expect" },
+        groupBy: "cluster",
+        curve: "cardinal",
+        boundaries: {
+          stroke: colors.ink,
+          strokeWidth: 1.3,
+          opacity: 0.72
+        }
+      })
+    }),
+    immutableStep({
+      id: "color",
+      op: "encodeColor",
+      label: "Map cluster to color",
+      code: `encodeColor({
     target: "errorBand",
     field: "cluster",
     fieldType: "nominal",
     scale: { palette: "tableau10" }
   })`,
-            apply: program => program.encodeColor({
-              target: "errorBand",
-              field: "cluster",
-              fieldType: "nominal",
-              scale: { palette: "tableau10" }
-            })
-          }),
+      apply: program => program.encodeColor({
+        target: "errorBand",
+        field: "cluster",
+        fieldType: "nominal",
+        scale: { palette: "tableau10" }
+      })
+    })
+  ]);
+
+  return {
+    id: "world",
+    tab: "Confidence bands",
+    eyebrow: "682 source rows · comparable interval revisions",
+    title: "How does confidence level change the same health trend?",
+    description:
+      "Keep the same data, marks, encodings, and guides; compare 95% and 80% intervals.",
+    sourceRows: gapminder.length,
+    rows,
+    common,
+    branches: Object.freeze([
+      Object.freeze({
+        id: "confidence95",
+        label: "95% interval",
+        description: "The conventional, wider confidence interval.",
+        rows: rows.length,
+        runnablePrelude: gapminderRunnablePrelude,
+        canvasName:
+          "Life expectancy by year and world cluster with 95 percent confidence intervals",
+        steps: Object.freeze([
           immutableStep({
-            id: "uncertainty-edit",
+            id: "confidence95-edit",
             op: "editErrorBand",
             label: "Make overlapping intervals legible",
             code: `editErrorBand({
@@ -887,7 +860,7 @@ function worldScenario(gapminder) {
             })
           }),
           immutableStep({
-            id: "uncertainty-guides",
+            id: "confidence95-guides",
             op: "createGuides",
             label: "Add temporal axes and legend",
             code: `createGuides({
@@ -906,9 +879,9 @@ function worldScenario(gapminder) {
             })
           }),
           immutableStep({
-            id: "uncertainty-title",
+            id: "confidence95-title",
             op: "createTitle",
-            label: "Name the statistical view",
+            label: "Name the 95% revision",
             code: `createTitle({
     text: "Life expectancy by cluster",
     subtitle: "Mean and 95% confidence interval"
@@ -921,109 +894,71 @@ function worldScenario(gapminder) {
         ])
       }),
       Object.freeze({
-        id: "heatmap",
-        label: "Heatmap",
-        description: "Six countries across eleven five-year snapshots.",
-        rows: heatmapRows.length,
-        runnablePrelude: heatmapRunnablePrelude,
+        id: "confidence80",
+        label: "80% interval",
+        description: "The same means with a tighter interval.",
+        rows: rows.length,
+        runnablePrelude: gapminderRunnablePrelude,
         canvasName:
-          "Heatmap of life expectancy for six countries from 1955 through 2005",
+          "Life expectancy by year and world cluster with 80 percent confidence intervals",
         steps: Object.freeze([
           immutableStep({
-            id: "heatmap-data",
-            op: "createData",
-            label: `Select ${heatmapRows.length} country-year records`,
-            code: `createData({
-    id: "countries",
-    values: selectedRows
-  })`,
-            apply: program => program.createData({
-              id: "countries",
-              values: heatmapRows
-            })
-          }),
-          immutableStep({
-            id: "heatmap-cells",
-            op: "createHeatmap",
-            label: "Map year, country, and health",
-            code: `createHeatmap({
-    id: "cells",
-    x: { field: "year", fieldType: "ordinal" },
-    y: { field: "country", fieldType: "nominal" },
-    color: {
-      field: "life_expect",
-      fieldType: "quantitative",
-      scale: { type: "sequential", palette: "viridis" }
-    },
-    guides: {
-      axes: {
-        x: { title: { text: "Year" } },
-        y: { title: { text: "Country" } }
-      },
-      legend: { title: "Life expectancy" }
+            id: "confidence80-edit",
+            op: "editErrorBand",
+            label: "Tighten the confidence level to 80%",
+            code: `editErrorBand({
+    statistics: { extent: "ci", level: 0.8 },
+    opacity: 0.28,
+    curve: "cardinal",
+    boundaries: {
+      stroke: "#172033",
+      strokeWidth: 1.3,
+      strokeDash: [5, 3],
+      opacity: 0.8
     }
   })`,
-            apply: program => program.createHeatmap({
-              id: "cells",
-              x: { field: "year", fieldType: "ordinal" },
-              y: { field: "country", fieldType: "nominal" },
-              color: {
-                field: "life_expect",
-                fieldType: "quantitative",
-                scale: { type: "sequential", palette: "viridis" }
-              },
-              guides: {
-                axes: {
-                  x: { title: { text: "Year" } },
-                  y: { title: { text: "Country" } }
-                },
-                legend: { title: "Life expectancy" }
+            apply: program => program.editErrorBand({
+              statistics: { extent: "ci", level: 0.8 },
+              opacity: 0.28,
+              curve: "cardinal",
+              boundaries: {
+                stroke: colors.ink,
+                strokeWidth: 1.3,
+                strokeDash: [5, 3],
+                opacity: 0.8
               }
             })
           }),
           immutableStep({
-            id: "heatmap-labels",
-            op: "createTextMark",
-            label: "Create cell labels",
-            code: `createTextMark({
-    fontSize: 10,
-    fontWeight: 650,
-    align: "center",
-    baseline: "middle"
+            id: "confidence80-guides",
+            op: "createGuides",
+            label: "Keep the same axes and legend",
+            code: `createGuides({
+    axes: {
+      x: { title: { text: "Year" } },
+      y: { title: { text: "Life expectancy" } }
+    },
+    legend: { title: "Cluster" }
   })`,
-            apply: program => program.createTextMark({
-              fontSize: 10,
-              fontWeight: 650,
-              align: "center",
-              baseline: "middle"
+            apply: program => program.createGuides({
+              axes: {
+                x: { title: { text: "Year" } },
+                y: { title: { text: "Life expectancy" } }
+              },
+              legend: { title: "Cluster" }
             })
           }),
           immutableStep({
-            id: "heatmap-text",
-            op: "encodeText",
-            label: "Print rounded life expectancy",
-            code: `encodeText({
-    field: "life_expect",
-    format: ".0f"
-  })`,
-            apply: program => program.encodeText({
-              field: "life_expect",
-              format: ".0f"
-            })
-          }),
-          immutableStep({
-            id: "heatmap-title",
+            id: "confidence80-title",
             op: "createTitle",
-            label: "Name the tiled comparison",
+            label: "Name the 80% revision",
             code: `createTitle({
-    text: "Life expectancy over time",
-    subtitle: "Six countries · 1955–2005",
-    align: "center"
+    text: "Life expectancy by cluster",
+    subtitle: "Mean and 80% confidence interval"
   })`,
             apply: program => program.createTitle({
-              text: "Life expectancy over time",
-              subtitle: "Six countries · 1955–2005",
-              align: "center"
+              text: "Life expectancy by cluster",
+              subtitle: "Mean and 80% confidence interval"
             })
           })
         ])

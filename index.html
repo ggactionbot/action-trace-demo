@@ -3,24 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
+    <meta name="description" content="Build static Canvas and PNG charts as immutable ggaction programs, compare eight revision paths, and inspect every authoring action.">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ggaction — branch an immutable chart program">
-    <meta property="og:description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
+    <meta property="og:title" content="ggaction — inspect every action in a static chart">
+    <meta property="og:description" content="Build static Canvas and PNG charts as immutable ggaction programs, compare eight revision paths, and inspect every authoring action.">
     <meta property="og:url" content="https://ggactionbot.github.io/action-trace-demo/">
     <meta property="og:image" content="https://ggactionbot.github.io/action-trace-demo/social-preview.png">
     <meta property="og:image:width" content="1280">
     <meta property="og:image:height" content="640">
     <meta property="og:image:alt" content="ggaction advanced demo showing two program branches, a regression chart, and fourteen immutable actions">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ggaction — branch an immutable chart program">
-    <meta name="twitter:description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
+    <meta name="twitter:title" content="ggaction — inspect every action in a static chart">
+    <meta name="twitter:description" content="Build static Canvas and PNG charts as immutable ggaction programs, compare eight revision paths, and inspect every authoring action.">
     <meta name="twitter:image" content="https://ggactionbot.github.io/action-trace-demo/social-preview.png">
     <meta name="twitter:image:alt" content="ggaction advanced demo showing two program branches, a regression chart, and fourteen immutable actions">
     <link rel="canonical" href="https://ggactionbot.github.io/action-trace-demo/">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23172033'/%3E%3Cpath d='M17 20h13v8h17M30 24v20m0-8h17' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-    <title>ggaction — branch an immutable chart program</title>
+    <title>ggaction — inspect every action in a static chart</title>
     <style>
       :root {
         color-scheme: light;
@@ -289,35 +289,68 @@
         text-underline-offset: 0.2em;
         cursor: pointer;
       }
-      .trace-list {
+      .trace-control {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 5px;
+        gap: 7px;
+        margin-bottom: 12px;
+      }
+      .trace-control label {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 0.68rem;
+      }
+      .trace-control label span { color: var(--ink); font-weight: 700; }
+      #trace-slider {
+        width: 100%;
         margin: 0;
-        padding: 0;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      #trace-help {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.64rem;
+      }
+      .trace-list {
+        display: flex;
+        gap: 0;
+        margin: 0;
+        padding: 3px 0 8px;
+        overflow-x: auto;
         list-style: none;
+        scrollbar-width: thin;
+      }
+      .trace-list li {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+      }
+      .trace-list li:not(:last-child)::after {
+        width: 15px;
+        height: 1px;
+        background: var(--line);
+        content: "";
       }
       .trace-step {
         position: relative;
-        display: grid;
-        grid-template-columns: 20px minmax(0, 1fr);
-        gap: 0 7px;
-        width: 100%;
-        min-height: 44px;
-        padding: 6px 7px;
-        text-align: left;
-        border: 1px solid var(--line);
-        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 32px;
+        padding: 3px 5px 3px 3px;
+        border: 0;
+        border-radius: 999px;
         background: #fff;
         cursor: pointer;
       }
       .trace-step > span {
-        grid-row: 1 / span 2;
-        align-self: center;
         display: grid;
         place-items: center;
-        width: 19px;
-        height: 19px;
+        width: 23px;
+        height: 23px;
         border-radius: 50%;
         color: var(--muted);
         background: var(--faint);
@@ -325,23 +358,13 @@
         font-weight: 740;
       }
       .trace-step code {
-        overflow: hidden;
-        font: 0.66rem/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .trace-step small {
-        overflow: hidden;
-        color: var(--muted);
-        font-size: 0.6rem;
-        line-height: 1.2;
-        text-overflow: ellipsis;
+        font: 0.64rem/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
         white-space: nowrap;
       }
       .trace-step.is-common::after {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 2px;
+        left: 2px;
         width: 4px;
         height: 4px;
         border-radius: 50%;
@@ -350,12 +373,12 @@
       }
       .trace-step.is-complete > span { color: #fff; background: #536b96; }
       .trace-step.is-current {
-        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
         background: var(--accent-soft);
       }
       .trace-step.is-current > span { color: #fff; background: var(--accent); }
       .code {
-        height: 260px;
+        height: 430px;
         margin: 0;
         padding: 13px;
         overflow: auto;
@@ -366,6 +389,11 @@
         tab-size: 2;
         white-space: pre;
       }
+      .code-keyword { color: #c4b5fd; }
+      .code-string { color: #a7f3d0; }
+      .code-number { color: #fbbf24; }
+      .code-method { color: #93c5fd; }
+      .code-comment { color: #9ca3af; font-style: italic; }
       .loading { margin: 0; color: var(--muted); font-size: 0.72rem; }
       .footnote {
         display: flex;
@@ -423,9 +451,7 @@
           border-top: 1px solid var(--line);
           border-left: 0;
         }
-        .trace-list { grid-template-columns: 1fr; }
         .trace-step code { font-size: 0.7rem; }
-        .trace-step small { font-size: 0.64rem; }
         .footnote { flex-direction: column; gap: 7px; }
       }
     </style>
@@ -444,13 +470,13 @@
       <main>
         <section class="intro" aria-labelledby="page-title">
           <div>
-            <p class="kicker">Immutable chart programs</p>
-            <h1 id="page-title">Build once.<br>Branch the question.</h1>
+            <p class="kicker">Static Canvas and PNG · immutable programs</p>
+            <h1 id="page-title">ggaction makes chart authoring inspectable.</h1>
           </div>
           <p class="lede">
-            Three real datasets become four statistical, faceted, tiled, and
-            polar stories. Choose a branch, then inspect every immutable action
-            on that path.
+            Build static visualizations through visible, immutable actions.
+            Compare eight revision paths, move through authoring with the
+            slider or arrow keys, then copy the exact program.
           </p>
         </section>
 
@@ -495,6 +521,15 @@
                 <div class="section-head">
                   <h3 id="trace-title">Selected action path</h3>
                   <span id="program-meta"></span>
+                </div>
+                <div class="trace-control">
+                  <label for="trace-slider">
+                    <span>Chart authoring progress</span>
+                    <output id="trace-output" for="trace-slider"></output>
+                  </label>
+                  <input id="trace-slider" type="range" min="1" value="1"
+                    aria-describedby="trace-help">
+                  <p id="trace-help">Use the slider or Left and Right Arrow keys to move one action.</p>
                 </div>
                 <ol class="trace-list" id="trace-list"></ol>
               </section>

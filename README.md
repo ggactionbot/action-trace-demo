@@ -5,7 +5,7 @@ A standalone, no-build browser demo for
 stories, choose between two immutable program branches in each story, inspect
 every action on the selected path, and compare the resulting Canvas output and
 visible code. The URL follows the selected scenario, branch, and action so any
-of the 78 states can be linked directly.
+of the 79 states can be linked directly.
 
 [![ggaction evaluator with two regression branches and fourteen immutable actions][preview]][live-demo]
 
@@ -20,8 +20,8 @@ The live URL is
 - 406 source car rows fork into 14-action linear and LOESS regression paths.
 - The same car data forks into 11-action scatter facets or 9-action histogram
   facets.
-- 682 Gapminder rows fork into a confidence-interval view or a labeled
-  six-country heatmap.
+- The same 682 Gapminder rows, marks, encodings, and guides compare 95% and
+  80% confidence-interval revisions.
 - 36 Nightingale records fork into a full polar area chart or a focused
   disease view.
 
@@ -29,7 +29,9 @@ Every branch is built from immutable program values. Primitive actions that
 are valid but not yet drawable—such as a point mark before both axes exist—are
 still selectable; the Canvas explicitly holds the last drawable preview until
 the path reaches a renderable state. The generated program for the selected
-branch stays visible and can be copied directly for further exploration.
+branch stays visible in a tall, syntax-highlighted code pane and can be copied
+directly for further exploration. A progress slider, the action strip, and the
+keyboard arrow keys all move through the same sequential revision history.
 
 ## Run locally
 
@@ -55,12 +57,13 @@ or download that document directly. The runnable artifact includes the pinned
 package import, exact data preparation, accessible Canvas, and rendering setup
 for the selected branch.
 
-The dedicated browser verifier walks all 78 intermediate/final action states
+The dedicated browser verifier walks all 79 intermediate/final action states
 across eight branches, checks keyboard behavior, exact rows and operations,
 branch-distinct Canvas output, 390 px layout, local data and exact-version CDN
-responses, direct state permalinks, all eight copied and downloaded runnable
-documents against their exact selected Canvas bytes, automated accessibility,
-and zero console/page/request failures:
+responses, progress-slider synchronization, syntax highlighting, direct state
+permalinks, all eight copied and downloaded runnable documents against their
+exact selected Canvas bytes—including direct `file:` opens—automated
+accessibility, and zero console/page/request failures:
 
 ```bash
 node ../mission/tools/verify-advanced-action-trace-demo.mjs \
