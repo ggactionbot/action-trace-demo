@@ -3,173 +3,292 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Explore three ggaction chart examples with visible program code and compact authored action traces.">
-    <meta name="theme-color" content="#101827">
+    <meta name="description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
+    <meta name="theme-color" content="#ffffff">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="ggaction — chart actions, made visible">
-    <meta property="og:description" content="Explore three ggaction chart examples with visible program code and compact authored action traces.">
+    <meta property="og:title" content="ggaction — branch an immutable chart program">
+    <meta property="og:description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
     <meta property="og:url" content="https://ggactionbot.github.io/action-trace-demo/">
     <meta property="og:image" content="https://ggactionbot.github.io/action-trace-demo/social-preview.png">
     <meta property="og:image:width" content="1280">
     <meta property="og:image:height" content="640">
-    <meta property="og:image:alt" content="ggaction action-trace demo showing a scatterplot, four authored actions, and its visible program code">
+    <meta property="og:image:alt" content="ggaction advanced demo showing two program branches, a regression chart, and fourteen immutable actions">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ggaction — chart actions, made visible">
-    <meta name="twitter:description" content="Explore three ggaction chart examples with visible program code and compact authored action traces.">
+    <meta name="twitter:title" content="ggaction — branch an immutable chart program">
+    <meta name="twitter:description" content="Explore eight branching ggaction programs across regression, facets, world health, and polar history—then inspect every immutable action.">
     <meta name="twitter:image" content="https://ggactionbot.github.io/action-trace-demo/social-preview.png">
-    <meta name="twitter:image:alt" content="ggaction action-trace demo showing a scatterplot, four authored actions, and its visible program code">
+    <meta name="twitter:image:alt" content="ggaction advanced demo showing two program branches, a regression chart, and fourteen immutable actions">
     <link rel="canonical" href="https://ggactionbot.github.io/action-trace-demo/">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231b2a41'/%3E%3Cpath d='M18 32h22m-8-8 8 8-8 8' fill='none' stroke='%23648cff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-    <title>ggaction — chart actions, made visible</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23172033'/%3E%3Cpath d='M17 20h13v8h17M30 24v20m0-8h17' fill='none' stroke='%23fff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <title>ggaction — branch an immutable chart program</title>
     <style>
       :root {
         color-scheme: light;
         --ink: #172033;
         --muted: #5d687c;
-        --paper: #f6f7f9;
-        --panel: #ffffff;
-        --line: #dfe3ea;
+        --faint: #f5f6f8;
+        --paper: #ffffff;
+        --line: #dce0e7;
         --accent: #3157a4;
         --accent-soft: #edf2ff;
-        --code: #101827;
       }
       * { box-sizing: border-box; }
+      html { background: var(--paper); }
       body {
         margin: 0;
         min-width: 320px;
         color: var(--ink);
         background: var(--paper);
-        font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font: 16px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
-      a { color: inherit; text-underline-offset: 0.2em; }
       button, code { font: inherit; }
       button { color: inherit; }
+      a { color: inherit; text-underline-offset: 0.2em; }
       .shell {
-        width: min(1160px, calc(100% - 32px));
+        width: min(1240px, calc(100% - 40px));
         margin: 0 auto;
-        padding: 26px 0 34px;
       }
       .site-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 52px;
+        min-height: 66px;
+        border-bottom: 1px solid var(--line);
       }
-      .brand { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.04em; }
+      .brand {
+        color: var(--ink);
+        font-weight: 820;
+        letter-spacing: -0.04em;
+        text-decoration: none;
+      }
       .brand span { color: var(--accent); }
-      nav { display: flex; gap: 20px; color: var(--muted); font-size: 0.9rem; }
-      .intro { max-width: 720px; margin-bottom: 30px; }
-      .kicker {
+      nav { display: flex; gap: 20px; color: var(--muted); font-size: 0.82rem; }
+      main { padding: 54px 0 30px; }
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+        gap: 50px;
+        align-items: end;
+        margin-bottom: 38px;
+      }
+      .kicker, .scenario-eyebrow {
         margin: 0 0 8px;
         color: var(--accent);
-        font-size: 0.75rem;
-        font-weight: 750;
+        font-size: 0.7rem;
+        font-weight: 780;
         letter-spacing: 0.12em;
         text-transform: uppercase;
       }
       h1 {
+        max-width: 760px;
         margin: 0;
-        font-size: clamp(2.25rem, 5vw, 4rem);
-        line-height: 1.04;
-        letter-spacing: -0.05em;
+        font-size: clamp(2.45rem, 5.5vw, 5.3rem);
+        font-weight: 780;
+        line-height: 0.98;
+        letter-spacing: -0.065em;
       }
-      .lede { max-width: 620px; margin: 14px 0 0; color: var(--muted); font-size: 1.04rem; }
-      .example-tabs {
-        display: flex;
-        gap: 8px;
-        min-height: 40px;
-        margin-bottom: 12px;
+      .lede {
+        margin: 0 0 5px;
+        color: var(--muted);
+        font-size: 1rem;
       }
-      .example-tab {
-        min-height: 40px;
-        padding: 0 16px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--panel);
-        cursor: pointer;
-        font-weight: 650;
-      }
-      .example-tab[aria-selected="true"] {
-        color: #fff;
-        border-color: var(--accent);
-        background: var(--accent);
-      }
-      .demo {
+      .scenario-tabs {
         display: grid;
-        grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
-        overflow: hidden;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: var(--panel);
-        box-shadow: 0 16px 48px rgb(23 32 51 / 8%);
+        grid-template-columns: repeat(4, 1fr);
+        border-block: 1px solid var(--line);
       }
-      .preview { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
-      .preview-head { min-height: 84px; padding: 22px 24px 0; }
-      .preview-head h2 { margin: 0; font-size: 1.18rem; }
-      .preview-head p { margin: 5px 0 0; color: var(--muted); font-size: 0.9rem; }
+      .scenario-tab {
+        display: grid;
+        gap: 2px;
+        min-height: 68px;
+        padding: 12px 16px;
+        text-align: left;
+        border: 0;
+        border-right: 1px solid var(--line);
+        background: #fff;
+        cursor: pointer;
+      }
+      .scenario-tab:last-child { border-right: 0; }
+      .scenario-tab span { font-weight: 720; }
+      .scenario-tab small {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 500;
+      }
+      .scenario-tab[aria-selected="true"] {
+        box-shadow: inset 0 -3px var(--accent);
+        background: var(--accent-soft);
+      }
+      .scenario-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 0.72fr);
+        gap: 42px;
+        padding: 34px 0 28px;
+      }
+      #scenario-panel { min-height: 1020px; }
+      body:not(.is-ready) #scenario-panel { visibility: hidden; }
+      .scenario-head h2 {
+        max-width: 680px;
+        margin: 0;
+        font-size: clamp(1.65rem, 3.2vw, 2.8rem);
+        line-height: 1.08;
+        letter-spacing: -0.045em;
+      }
+      .scenario-description {
+        max-width: 640px;
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+      .branch-block { align-self: end; }
+      .branch-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 0.72rem;
+      }
+      .branch-label strong { color: var(--ink); font-size: 0.75rem; }
+      .branch-choices {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .branch-choice {
+        display: grid;
+        gap: 3px;
+        min-height: 94px;
+        padding: 12px 13px;
+        text-align: left;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .branch-choice span { font-weight: 720; }
+      .branch-choice small {
+        color: var(--muted);
+        font-size: 0.72rem;
+        line-height: 1.3;
+      }
+      .branch-choice em {
+        align-self: end;
+        color: var(--muted);
+        font-size: 0.66rem;
+        font-style: normal;
+      }
+      .branch-choice[aria-checked="true"] {
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
+        background: var(--accent-soft);
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.28fr) minmax(360px, 0.72fr);
+        border-block: 1px solid var(--line);
+      }
+      .preview {
+        display: grid;
+        grid-template-rows: auto minmax(520px, 1fr) auto;
+        min-width: 0;
+        border-right: 1px solid var(--line);
+      }
+      .preview-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 58px;
+        padding: 10px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+      .preview-head strong { font-size: 0.78rem; }
+      .preview-head span { color: var(--muted); font-size: 0.72rem; }
       .canvas-scroll {
         display: grid;
         place-items: center;
-        min-height: 410px;
-        padding: 18px 24px;
+        min-width: 0;
+        padding: 26px 18px;
         overflow: auto;
+        background:
+          linear-gradient(#fff, #fff) padding-box,
+          repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 23px,
+            rgb(23 32 51 / 2.5%) 24px
+          );
       }
-      canvas { display: block; max-width: 100%; height: auto; background: #fff; }
+      canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        background: #fff;
+      }
       .preview-controls {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        min-height: 68px;
-        padding: 12px 24px;
+        gap: 18px;
+        min-height: 62px;
+        padding: 10px 18px;
         border-top: 1px solid var(--line);
       }
-      #step-summary { color: var(--muted); font-size: 0.86rem; }
-      .button-row { display: flex; gap: 8px; }
+      #step-summary { color: var(--muted); font-size: 0.78rem; }
+      .button-row { display: flex; gap: 7px; }
       .button-row button {
-        min-height: 40px;
-        padding: 0 14px;
+        min-height: 38px;
+        padding: 0 13px;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 6px;
         background: #fff;
         cursor: pointer;
       }
-      .button-row .primary { color: #fff; border-color: var(--accent); background: var(--accent); }
+      .button-row .primary {
+        color: #fff;
+        border-color: var(--accent);
+        background: var(--accent);
+      }
       button:disabled { cursor: not-allowed; opacity: 0.42; }
       button:focus-visible, a:focus-visible, [tabindex="0"]:focus-visible {
-        outline: 3px solid rgb(49 87 164 / 36%);
+        outline: 3px solid rgb(49 87 164 / 34%);
         outline-offset: 3px;
       }
-      .inspector {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        min-width: 0;
-        border-left: 1px solid var(--line);
-        background: #fbfcfe;
-      }
-      .inspect-section { min-width: 0; padding: 20px; }
+      .inspector { min-width: 0; background: #fff; }
+      .inspect-section { min-width: 0; padding: 17px 18px 19px; }
       .inspect-section + .inspect-section { border-top: 1px solid var(--line); }
       .section-head {
         display: flex;
         align-items: baseline;
         justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 12px;
+        gap: 15px;
+        margin-bottom: 10px;
       }
-      .section-head h3 { margin: 0; font-size: 0.94rem; }
-      .section-head span, .section-head a { color: var(--muted); font-size: 0.75rem; }
-      .trace-list { display: grid; gap: 6px; min-height: 218px; margin: 0; padding: 0; list-style: none; }
-      .trace-step {
+      .section-head h3 { margin: 0; font-size: 0.8rem; }
+      .section-head span, .section-head a {
+        color: var(--muted);
+        font-size: 0.68rem;
+      }
+      .trace-list {
         display: grid;
-        grid-template-columns: 24px minmax(0, 1fr);
-        gap: 0 10px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .trace-step {
+        position: relative;
+        display: grid;
+        grid-template-columns: 20px minmax(0, 1fr);
+        gap: 0 7px;
         width: 100%;
-        min-height: 48px;
-        padding: 7px 10px;
+        min-height: 44px;
+        padding: 6px 7px;
         text-align: left;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 5px;
         background: #fff;
         cursor: pointer;
       }
@@ -178,39 +297,64 @@
         align-self: center;
         display: grid;
         place-items: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 999px;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
         color: var(--muted);
-        background: var(--paper);
-        font-size: 0.72rem;
-        font-weight: 700;
+        background: var(--faint);
+        font-size: 0.62rem;
+        font-weight: 740;
       }
-      .trace-step code { overflow: hidden; font: 0.78rem/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; text-overflow: ellipsis; }
-      .trace-step small { overflow: hidden; color: var(--muted); font-size: 0.72rem; text-overflow: ellipsis; white-space: nowrap; }
-      .trace-step.is-complete > span { color: #fff; background: #7588b3; }
-      .trace-step.is-current { border-color: var(--accent); background: var(--accent-soft); }
+      .trace-step code {
+        overflow: hidden;
+        font: 0.66rem/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .trace-step small {
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 0.6rem;
+        line-height: 1.2;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .trace-step.is-common::after {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #9aa4b4;
+        content: "";
+      }
+      .trace-step.is-complete > span { color: #fff; background: #536b96; }
+      .trace-step.is-current {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
       .trace-step.is-current > span { color: #fff; background: var(--accent); }
-      .code-panel { min-height: 0; }
       .code {
-        height: 242px;
+        height: 260px;
         margin: 0;
-        padding: 14px;
+        padding: 13px;
         overflow: auto;
-        border-radius: 9px;
+        border-radius: 6px;
         color: #dce6ff;
-        background: var(--code);
-        font: 0.74rem/1.48 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #101827;
+        font: 0.66rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         tab-size: 2;
         white-space: pre;
       }
+      .loading { margin: 0; color: var(--muted); font-size: 0.72rem; }
       .footnote {
         display: flex;
         justify-content: space-between;
-        gap: 24px;
-        margin: 20px 2px 0;
+        gap: 30px;
+        padding: 18px 0 28px;
         color: var(--muted);
-        font-size: 0.8rem;
+        font-size: 0.72rem;
       }
       .footnote p { margin: 0; }
       #status {
@@ -220,88 +364,137 @@
         overflow: hidden;
         clip: rect(0 0 0 0);
       }
-      @media (max-width: 900px) {
-        .demo { grid-template-columns: 1fr; }
-        .inspector { grid-template-columns: 1fr 1fr; grid-template-rows: auto; border-top: 1px solid var(--line); border-left: 0; }
-        .inspect-section + .inspect-section { border-top: 0; border-left: 1px solid var(--line); }
+      @media (max-width: 980px) {
+        #scenario-panel { min-height: 1620px; }
+        .intro, .scenario-head { grid-template-columns: 1fr; gap: 24px; }
+        .workspace { grid-template-columns: 1fr; }
+        .preview { border-right: 0; }
+        .inspector { border-top: 1px solid var(--line); }
+        .inspector {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+        .inspect-section + .inspect-section {
+          border-top: 0;
+          border-left: 1px solid var(--line);
+        }
       }
-      @media (max-width: 620px) {
-        .shell { width: min(100% - 20px, 1160px); padding-top: 18px; }
-        .site-header { align-items: flex-start; margin-bottom: 36px; }
-        nav { gap: 12px; font-size: 0.8rem; }
-        .intro { margin-bottom: 24px; }
-        .example-tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
-        .example-tab { padding: 0 8px; }
-        .preview-head { min-height: 106px; padding: 18px 16px 0; }
-        .canvas-scroll { min-height: 290px; padding: 12px 10px; }
-        .preview-controls { align-items: flex-start; flex-direction: column; padding: 12px 16px 16px; }
+      @media (max-width: 700px) {
+        #scenario-panel { min-height: 2200px; }
+        .shell { width: min(100% - 20px, 1240px); }
+        .site-header { min-height: 56px; }
+        nav { gap: 12px; font-size: 0.74rem; }
+        main { padding-top: 34px; }
+        .intro { margin-bottom: 28px; }
+        .scenario-tabs { grid-template-columns: repeat(2, 1fr); }
+        .scenario-tab:nth-child(2) { border-right: 0; }
+        .scenario-tab:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+        .scenario-head { padding-top: 28px; }
+        .branch-choices { grid-template-columns: 1fr; }
+        .branch-choice { min-height: 78px; }
+        .preview { grid-template-rows: auto minmax(400px, 1fr) auto; }
+        .canvas-scroll { padding: 18px 8px; }
+        .preview-controls {
+          align-items: flex-start;
+          flex-direction: column;
+          padding-block: 12px;
+        }
         .inspector { grid-template-columns: 1fr; }
-        .inspect-section { padding: 16px; }
-        .inspect-section + .inspect-section { border-top: 1px solid var(--line); border-left: 0; }
-        .footnote { flex-direction: column; gap: 8px; }
+        .inspect-section + .inspect-section {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+        .trace-list { grid-template-columns: 1fr; }
+        .trace-step code { font-size: 0.7rem; }
+        .trace-step small { font-size: 0.64rem; }
+        .footnote { flex-direction: column; gap: 7px; }
       }
     </style>
   </head>
   <body>
     <div class="shell">
       <header class="site-header">
-        <div class="brand">gg<span>action</span></div>
+        <a class="brand" href="https://github.com/ggaction/ggaction">gg<span>action</span></a>
         <nav aria-label="Project links">
           <a href="https://ggaction.github.io/ggaction/">Docs</a>
-          <a href="https://github.com/ggactionbot/action-trace-demo">Source</a>
           <a href="https://github.com/ggaction/ggaction">GitHub</a>
+          <a href="https://github.com/ggactionbot/action-trace-demo">Source</a>
         </nav>
       </header>
+
       <main>
         <section class="intro" aria-labelledby="page-title">
-          <p class="kicker">Live examples</p>
-          <h1 id="page-title">Build a chart. See every action.</h1>
-          <p class="lede">Choose an example, read its program, and move through the four immutable actions that produce the chart.</p>
+          <div>
+            <p class="kicker">Immutable chart programs</p>
+            <h1 id="page-title">Build once.<br>Branch the question.</h1>
+          </div>
+          <p class="lede">
+            Three real datasets become four statistical, faceted, tiled, and
+            polar stories. Choose a branch, then inspect every immutable action
+            on that path.
+          </p>
         </section>
 
-        <div class="example-tabs" id="example-tabs" role="tablist" aria-label="Chart examples"></div>
+        <div class="scenario-tabs" id="scenario-tabs" role="tablist" aria-label="Chart stories"></div>
 
-        <section class="demo" id="example-panel" role="tabpanel" aria-label="Interactive chart example">
-          <article class="preview">
-            <div class="preview-head">
-              <h2 id="example-title"></h2>
-              <p id="example-description"></p>
+        <section id="scenario-panel" role="tabpanel" aria-label="Advanced chart story">
+          <div class="scenario-head">
+            <div>
+              <p class="scenario-eyebrow" id="scenario-eyebrow"></p>
+              <h2 id="scenario-title"></h2>
+              <p class="scenario-description" id="scenario-description"></p>
             </div>
-            <div class="canvas-scroll" tabindex="0" aria-label="Chart preview">
-              <canvas id="chart" width="560" height="340" aria-label="Chart preview">Chart preview.</canvas>
-            </div>
-            <div class="preview-controls">
-              <span id="step-summary"></span>
-              <div class="button-row">
-                <button id="previous" type="button">Previous</button>
-                <button class="primary" id="next" type="button">Next action</button>
+            <div class="branch-block">
+              <div class="branch-label">
+                <strong>Choose the revision</strong>
+                <span id="fork-label"></span>
               </div>
+              <div class="branch-choices" id="branch-choices" role="radiogroup"></div>
             </div>
-          </article>
+          </div>
 
-          <aside class="inspector" aria-label="Code and action trace">
-            <section class="inspect-section" aria-labelledby="trace-title">
-              <div class="section-head">
-                <h3 id="trace-title">Action trace</h3>
-                <span id="program-meta"></span>
+          <div class="workspace">
+            <article class="preview">
+              <div class="preview-head">
+                <strong>Rendered program</strong>
+                <span id="branch-summary"></span>
               </div>
-              <ol class="trace-list" id="trace-list"></ol>
-            </section>
-            <section class="inspect-section code-panel" aria-labelledby="code-title">
-              <div class="section-head">
-                <h3 id="code-title">Program code</h3>
-                <a href="https://github.com/ggactionbot/action-trace-demo/blob/main/program.js">View source</a>
+              <div class="canvas-scroll" tabindex="0" aria-label="Scrollable chart preview">
+                <canvas id="chart" width="760" height="500" aria-label="Chart preview">Chart preview.</canvas>
               </div>
-              <pre class="code" id="source-code" tabindex="0"></pre>
-            </section>
-          </aside>
+              <div class="preview-controls">
+                <span id="step-summary"></span>
+                <div class="button-row">
+                  <button id="previous" type="button">Previous</button>
+                  <button class="primary" id="next" type="button">Next action</button>
+                </div>
+              </div>
+            </article>
+
+            <aside class="inspector" aria-label="Action path and program code">
+              <section class="inspect-section" aria-labelledby="trace-title">
+                <div class="section-head">
+                  <h3 id="trace-title">Selected action path</h3>
+                  <span id="program-meta"></span>
+                </div>
+                <ol class="trace-list" id="trace-list"></ol>
+              </section>
+              <section class="inspect-section" aria-labelledby="code-title">
+                <div class="section-head">
+                  <h3 id="code-title">Program code</h3>
+                  <a href="./program.js">View program source</a>
+                </div>
+                <pre class="code" id="source-code" tabindex="0"></pre>
+              </section>
+            </aside>
+          </div>
         </section>
 
         <div class="footnote">
-          <p>Runs in the browser with public <code>ggaction@0.0.6</code>. No signup or build step.</p>
+          <p id="loading">Pinned to released <code>ggaction@0.0.6</code>.</p>
           <p>Prepared by an autonomous AI agent working for the ggaction project.</p>
         </div>
-        <p id="status" role="status" aria-live="polite">Loading examples</p>
+        <p id="status" role="status" aria-live="polite">Loading chart stories</p>
       </main>
     </div>
     <script type="module" src="./main.js"></script>
