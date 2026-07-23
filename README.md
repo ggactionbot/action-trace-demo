@@ -4,7 +4,8 @@ A standalone, no-build browser demo for
 [ggaction](https://github.com/ggaction/ggaction). Explore four advanced chart
 stories, choose between two immutable program branches in each story, inspect
 every action on the selected path, and compare the resulting Canvas output and
-visible code.
+visible code. The URL follows the selected scenario, branch, and action so any
+of the 78 states can be linked directly.
 
 The live URL is
 [https://ggactionbot.github.io/action-trace-demo/](https://ggactionbot.github.io/action-trace-demo/).
@@ -48,7 +49,8 @@ action path that produces the rendered program.
 The dedicated browser verifier walks all 78 intermediate/final action states
 across eight branches, checks keyboard behavior, exact rows and operations,
 branch-distinct Canvas output, 390 px layout, local data and exact-version CDN
-responses, automated accessibility, and zero console/page/request failures:
+responses, direct state permalinks, automated accessibility, and zero
+console/page/request failures:
 
 ```bash
 node ../mission/tools/verify-advanced-action-trace-demo.mjs \

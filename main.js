@@ -48,6 +48,35 @@ function currentSelection() {
   return { scenario, branch };
 }
 
+function restorePermalink() {
+  let parts;
+  try {
+    parts = location.hash.slice(1).split("/").map(decodeURIComponent);
+  } catch {
+    return false;
+  }
+  const nextScenarioIndex = scenarios.findIndex(item => item.id === parts[0]);
+  if (nextScenarioIndex < 0) return false;
+
+  scenarioIndex = nextScenarioIndex;
+  const scenario = scenarios[scenarioIndex];
+  const nextBranchIndex = scenario.branches.findIndex(
+    item => item.id === parts[1]
+  );
+  branchIndex = Math.max(0, nextBranchIndex);
+  const branch = scenario.branches[branchIndex].build();
+  const nextStepIndex = branch.stages.findIndex(item => item.id === parts[2]);
+  stepIndex = nextStepIndex < 0 ? branch.stages.length - 1 : nextStepIndex;
+  return true;
+}
+
+function syncPermalink(scenario, branch, stage) {
+  const hash = `#${[scenario.id, branch.id, stage.id]
+    .map(encodeURIComponent)
+    .join("/")}`;
+  if (location.hash !== hash) history.replaceState(null, "", hash);
+}
+
 function publishState(scenario, branch, stage, renderedStep) {
   const program = stage.program;
   window.__ggactionDemo = Object.freeze({
@@ -230,6 +259,7 @@ function update() {
   status.textContent =
     `${scenario.tab}, ${branch.label}, ${stage.label}, action ` +
     `${stepIndex + 1} of ${branch.stages.length}`;
+  syncPermalink(scenario, branch, stage);
   publishState(scenario, branch, stage, renderedStep);
 }
 
@@ -261,10 +291,16 @@ copyProgramButton.addEventListener("click", async () => {
   }
 });
 
+window.addEventListener("hashchange", () => {
+  if (scenarios && restorePermalink()) update();
+});
+
 try {
   const data = await loadData();
   scenarios = createDemoScenarios(data);
-  stepIndex = scenarios[0].branches[0].actionCount - 1;
+  if (!restorePermalink()) {
+    stepIndex = scenarios[0].branches[0].actionCount - 1;
+  }
   update();
   requestAnimationFrame(() => document.body.classList.add("is-ready"));
 } catch (error) {
