@@ -592,7 +592,13 @@ function facetsScenario(cars) {
             label: "Add axes and horizontal grid",
             code: `createGuides({
     axes: {
-      x: { title: { text: "Displacement" } },
+      x: {
+        title: { text: "Displacement" },
+        ticksAndLabels: {
+          values: [50, 200, 350, 500],
+          labels: { format: { decimals: 0 } }
+        }
+      },
       y: { title: { text: "Count" } }
     },
     legend: false,
@@ -600,7 +606,13 @@ function facetsScenario(cars) {
   })`,
             apply: program => program.createGuides({
               axes: {
-                x: { title: { text: "Displacement" } },
+                x: {
+                  title: { text: "Displacement" },
+                  ticksAndLabels: {
+                    values: [50, 200, 350, 500],
+                    labels: { format: { decimals: 0 } }
+                  }
+                },
                 y: { title: { text: "Count", offset: 39 } }
               },
               legend: false,
