@@ -58,10 +58,14 @@ Keeping them local makes the evaluator deterministic and avoids an additional
 runtime dependency. The visible program is generated from the same selected
 action path that produces the rendered program.
 Visitors can copy the visible fragment, copy a complete runnable HTML document,
-or download that document directly. The runnable artifact includes the pinned
-package import, exact data preparation, accessible Canvas, and rendering setup
-for the selected branch.
-After a runnable copy or download succeeds, the evaluator reveals one quiet
+download that document directly, or download the currently visible Canvas as a
+PNG. A PNG export names the scenario, branch, and actual rendered action; when
+an intermediate action is not yet drawable, the status message identifies the
+held preview that was exported. The browser snapshot is distinct from the Node
+`ggaction/png` renderer and makes no cross-browser byte-identity guarantee.
+The runnable artifact includes the pinned package import, exact data
+preparation, accessible Canvas, and rendering setup for the selected branch.
+After a runnable or PNG export succeeds, the evaluator reveals one quiet
 contextual link to the upstream ggaction repository. It does not open a popup,
 ask for a star, show a count, or repeat the prompt.
 
@@ -70,8 +74,9 @@ across eight branches, checks keyboard behavior, exact rows and operations,
 branch-distinct Canvas output, 390 px layout, local data and exact-version CDN
 responses, progress-slider synchronization, syntax highlighting, direct state
 permalinks, all eight copied and downloaded runnable documents against their
-exact selected Canvas bytes—including direct `file:` opens—automated
-accessibility, and zero console/page/request failures:
+exact selected Canvas bytes—including direct `file:` opens—eight final PNG
+downloads, one held-preview PNG, object-URL cleanup, automated accessibility,
+and zero console/page/request failures:
 
 ```bash
 node ../mission/tools/verify-advanced-action-trace-demo.mjs \

@@ -35,6 +35,7 @@ const nextButton = document.querySelector("#next");
 const copyProgramButton = document.querySelector("#copy-program");
 const copyRunnableButton = document.querySelector("#copy-runnable");
 const downloadRunnableButton = document.querySelector("#download-runnable");
+const downloadPngButton = document.querySelector("#download-png");
 const sourceCode = document.querySelector("#source-code");
 const status = document.querySelector("#status");
 const projectFollowup = document.querySelector("#project-followup");
@@ -56,6 +57,15 @@ function currentSelection() {
 
 function revealProjectFollowup() {
   projectFollowup.hidden = false;
+}
+
+function renderedStepFor(branch) {
+  const stage = branch.stages[stepIndex];
+  return stage.preview === "defer"
+    ? branch.stages.slice(0, stepIndex).findLastIndex(item =>
+        item.preview !== "defer"
+      )
+    : stepIndex;
 }
 
 const sourceKeywords = new Set([
@@ -129,6 +139,7 @@ function publishState(scenario, branch, stage, renderedStep) {
     branchLabels: Object.freeze(scenario.branches.map(item => item.label)),
     step: stepIndex,
     renderedStep,
+    renderedStepId: branch.stages[renderedStep].id,
     previewDeferred: renderedStep !== stepIndex,
     stepId: stage.id,
     steps: branch.stages.length,
@@ -272,11 +283,7 @@ function updateTrace(scenario, branch) {
 function update() {
   const { scenario, branch } = currentSelection();
   const stage = branch.stages[stepIndex];
-  const renderedStep = stage.preview === "defer"
-    ? branch.stages.slice(0, stepIndex).findLastIndex(item =>
-        item.preview !== "defer"
-      )
-    : stepIndex;
+  const renderedStep = renderedStepFor(branch);
   const previewStage = branch.stages[Math.max(0, renderedStep)];
 
   canvas.setAttribute("aria-label", branch.canvasName);
@@ -301,6 +308,7 @@ function update() {
   copyProgramButton.textContent = "Copy program";
   copyRunnableButton.textContent = "Copy runnable HTML";
   downloadRunnableButton.textContent = "Download runnable HTML";
+  downloadPngButton.textContent = "Download current Canvas PNG";
   document.querySelector("#step-summary").textContent =
     `Action ${stepIndex + 1} of ${branch.stages.length}: ${stage.label}` +
     (renderedStep === stepIndex
@@ -412,6 +420,47 @@ downloadRunnableButton.addEventListener("click", () => {
   status.textContent =
     "Runnable HTML for the selected ggaction branch downloaded.";
   revealProjectFollowup();
+});
+
+downloadPngButton.addEventListener("click", async () => {
+  const { scenario, branch } = currentSelection();
+  const selectedStage = branch.stages[stepIndex];
+  const renderedStep = renderedStepFor(branch);
+  const renderedStage = branch.stages[renderedStep];
+  downloadPngButton.disabled = true;
+
+  try {
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(result => {
+        if (result) resolve(result);
+        else reject(new Error("Canvas PNG encoding returned no data."));
+      }, "image/png");
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download =
+      `ggaction-${scenario.id}-${branch.id}-${renderedStage.id}.png`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+
+    downloadPngButton.textContent = "Canvas PNG downloaded";
+    status.textContent = renderedStep === stepIndex
+      ? `Canvas PNG downloaded for action ${stepIndex + 1}: ` +
+        `${selectedStage.label}.`
+      : `Canvas PNG downloaded from the held preview at action ` +
+        `${renderedStep + 1}: ${renderedStage.label}; selected action ` +
+        `${stepIndex + 1} is not yet drawable.`;
+    revealProjectFollowup();
+  } catch {
+    downloadPngButton.textContent = "PNG download failed";
+    status.textContent =
+      "Canvas PNG encoding failed. The visible chart was not downloaded.";
+  } finally {
+    downloadPngButton.disabled = false;
+  }
 });
 
 window.addEventListener("hashchange", () => {
